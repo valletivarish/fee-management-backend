@@ -8,6 +8,7 @@ C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\exception\StudentErrorResponse.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\controller\StudentController.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\dto\AppInfoResponse.java
+C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\controller\DbStatsController.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\service\AuthServiceImpl.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\entity\FeePlan.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\exception\StudentApiException.java
@@ -32,6 +33,7 @@ C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\entity\Student.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\service\PaymentService.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\service\StudentService.java
+C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\config\OpenApiConfig.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\service\AuthService.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\dto\LoginDto.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\repository\UserRepository.java
