@@ -1,0 +1,25 @@
+# Maven build directories
+/target/
+
+# Logs and temporary files
+*.log
+*.out
+*.tmp
+
+# IDE configurations
+/.classpath
+/.project
+/.settings/
+/.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Spring Boot specific
+SpringBootMainApplication.class
+
+# Local environment files
+.env
+secrets.properties

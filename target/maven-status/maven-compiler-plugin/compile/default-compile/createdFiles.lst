@@ -2,6 +2,7 @@ com\organization\repository\StudentFeeRepository.class
 com\organization\entity\Payment$Method.class
 com\organization\controller\PaymentController.class
 com\organization\controller\AuthController.class
+com\organization\dto\AppInfoResponse.class
 com\organization\dto\RegisterDto.class
 com\organization\repository\StudentRepository.class
 com\organization\exception\StudentNotFoundException.class
@@ -41,6 +42,7 @@ com\organization\security\JwtAuthenticationEntryPoint.class
 com\organization\service\AuthService.class
 com\organization\entity\StudentFee.class
 com\organization\entity\Student$CourseEnrollment.class
+com\organization\controller\AppInfoController.class
 com\organization\entity\Payment.class
 com\organization\entity\Student.class
 com\organization\entity\FeePlan.class
