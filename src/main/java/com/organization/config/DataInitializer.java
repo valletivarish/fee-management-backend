@@ -114,6 +114,7 @@ public class DataInitializer {
                     studentUser.setEmail(seed.email());
                     studentUser.setPassword(passwordEncoder.encode(seed.password()));
                     studentUser.setRoles(Set.of("ROLE_STUDENT"));
+                    studentUser.setMustChangePassword(true);
 
                     userRepository.save(studentUser);
 

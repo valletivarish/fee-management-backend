@@ -11,6 +11,7 @@ C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\controller\StudentController.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\controller\StudentFeeController.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\dto\AppInfoResponse.java
+C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\dto\ChangePasswordRequest.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\dto\JWTAuthResponse.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\dto\LoginDto.java
 C:\Users\varis\Downloads\fee-management-system\fee-management-system\backend\src\main\java\com\organization\dto\RegisterDto.java

@@ -24,6 +24,7 @@ public class User {
 
     @Indexed
     private Set<String> roles;
+    private boolean mustChangePassword;
 
     public User() {}
 
@@ -82,6 +83,14 @@ public class User {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    public boolean isMustChangePassword() {
+        return mustChangePassword;
+    }
+
+    public void setMustChangePassword(boolean mustChangePassword) {
+        this.mustChangePassword = mustChangePassword;
     }
 
     @Override

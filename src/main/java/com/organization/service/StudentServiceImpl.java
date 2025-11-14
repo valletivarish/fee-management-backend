@@ -5,25 +5,37 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.organization.entity.Student;
+import com.organization.entity.User;
 import com.organization.exception.StudentApiException;
 import com.organization.exception.StudentNotFoundException;
 import com.organization.repository.StudentRepository;
+import com.organization.repository.UserRepository;
 
 @Service
 @Transactional
 public class StudentServiceImpl implements StudentService {
 
+	private static final String DEFAULT_STUDENT_PASSWORD = "FeeM@2025";
+
 	@Autowired
 	private StudentRepository repository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<Student> findAll() {
@@ -44,7 +56,9 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Student save(Student student) {
 		normalizeStudent(student);
-		return repository.save(student);
+		Student saved = repository.save(student);
+		ensureStudentPortalAccount(saved);
+		return saved;
 	}
 
 	@Transactional
@@ -57,7 +71,9 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public List<Student> saveAll(List<Student> studentList) {
 		studentList.forEach(this::normalizeStudent);
-		return repository.saveAll(studentList);
+		List<Student> saved = repository.saveAll(studentList);
+		saved.forEach(this::ensureStudentPortalAccount);
+		return saved;
 	}
 
 	private void normalizeStudent(Student student) {
@@ -121,5 +137,34 @@ public class StudentServiceImpl implements StudentService {
 
 		student.setCourse(primary.getCourseName());
 		student.setAcademicYear(primary.getStartYear() + "-" + primary.getEndYear());
+	}
+
+	private void ensureStudentPortalAccount(Student student) {
+		if (student.getEmail() == null || student.getEmail().isBlank()) {
+			return;
+		}
+
+		userRepository.findByEmail(student.getEmail())
+				.ifPresentOrElse(existing -> {
+					if (!existing.getRoles().contains("ROLE_STUDENT")) {
+						existing.getRoles().add("ROLE_STUDENT");
+						userRepository.save(existing);
+					}
+				}, () -> {
+					User studentUser = new User();
+					studentUser.setName(String.format("%s %s",
+							defaultString(student.getFirstName()),
+							defaultString(student.getLastName())).trim());
+					studentUser.setUsername(student.getEmail());
+					studentUser.setEmail(student.getEmail());
+					studentUser.setPassword(passwordEncoder.encode(DEFAULT_STUDENT_PASSWORD));
+					studentUser.setRoles(Set.of("ROLE_STUDENT"));
+					studentUser.setMustChangePassword(true);
+					userRepository.save(studentUser);
+				});
+	}
+
+	private String defaultString(String value) {
+		return value == null ? "" : value;
 	}
 }

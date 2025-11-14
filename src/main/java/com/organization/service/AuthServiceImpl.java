@@ -3,6 +3,8 @@ package com.organization.service;
 import com.organization.entity.User;
 import com.organization.dto.LoginDto;
 import com.organization.dto.RegisterDto;
+import com.organization.dto.ChangePasswordRequest;
+import com.organization.dto.JWTAuthResponse;
 import com.organization.repository.UserRepository;
 import com.organization.security.JwtTokenProvider;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.Set;
 
 @Service
@@ -55,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(LoginDto loginDto) {
+    public JWTAuthResponse login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getUsernameOrEmail(),
@@ -63,6 +66,35 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return tokenProvider.generateToken(authentication);
+        String token = tokenProvider.generateToken(authentication);
+
+        User user = userRepository
+                .findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail())
+                .orElse(null);
+
+        boolean mustChangePassword = user != null && user.isMustChangePassword();
+        Set<String> roles = (user != null && user.getRoles() != null) ? user.getRoles() : Collections.emptySet();
+        String primaryRole = roles.stream().findFirst().orElse("ROLE_USER");
+
+        JWTAuthResponse response = new JWTAuthResponse();
+        response.setAccessToken(token);
+        response.setMustChangePassword(mustChangePassword);
+        response.setRole(primaryRole);
+        response.setRoles(roles);
+        return response;
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user.setMustChangePassword(false);
+        userRepository.save(user);
     }
 }

@@ -4,6 +4,7 @@ import com.organization.dto.JWTAuthResponse;
 import com.organization.dto.LoginDto;
 import com.organization.dto.RegisterDto;
 import com.organization.service.AuthService;
+import com.organization.dto.ChangePasswordRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,10 +25,7 @@ public class AuthController {
     // Build Login REST API
     @PostMapping(value = {"/login", "/signin"})
     public ResponseEntity<JWTAuthResponse> login(@RequestBody LoginDto loginDto){
-        String token = authService.login(loginDto);
-        JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
-        jwtAuthResponse.setAccessToken(token);
-
+        JWTAuthResponse jwtAuthResponse = authService.login(loginDto);
         return ResponseEntity.ok(jwtAuthResponse);
     }
 
@@ -36,5 +34,10 @@ public class AuthController {
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
         String response = authService.register(registerDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+    @PostMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequest request) {
+        authService.changePassword(request);
+        return ResponseEntity.ok().build();
     }
 }
