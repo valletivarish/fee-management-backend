@@ -9,6 +9,7 @@ com\organization\exception\StudentNotFoundException.class
 com\organization\config\DataInitializer.class
 com\organization\security\JwtTokenProvider.class
 com\organization\service\StudentServiceImpl.class
+com\organization\config\DataInitializer$StudentSeed.class
 com\organization\security\JwtAuthenticationFilter.class
 com\organization\controller\HealthController.class
 com\organization\exception\GlobalExceptionHandler.class

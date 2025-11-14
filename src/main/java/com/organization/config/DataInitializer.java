@@ -1,21 +1,31 @@
 package com.organization.config;
 
+import com.organization.entity.Student;
+import com.organization.entity.Student.CourseEnrollment;
 import com.organization.entity.User;
+import com.organization.repository.StudentRepository;
 import com.organization.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.organization.entity.Student;
-import com.organization.entity.Student.CourseEnrollment;
-import com.organization.repository.StudentRepository;
-
+import java.time.Year;
 import java.util.List;
 import java.util.Set;
 
 @Configuration
 public class DataInitializer {
+
+    private record StudentSeed(
+            String firstName,
+            String lastName,
+            String email,
+            String password,
+            String course,
+            String academicYear,
+            int startYear,
+            int endYear) { }
 
     @Bean
     CommandLineRunner initAdmin(UserRepository userRepository,
@@ -23,7 +33,6 @@ public class DataInitializer {
                                PasswordEncoder passwordEncoder) {
         return args -> {
             String adminEmail = "admin@example.com";
-            String studentEmail = "john.doe@example.com";
 
             if (!userRepository.existsByEmail(adminEmail)) {
                 User admin = new User();
@@ -40,25 +49,79 @@ public class DataInitializer {
                 System.out.println("Admin user already exists: " + adminEmail);
             }
 
-            if (!studentRepository.existsByEmail(studentEmail)) {
-                Student student = new Student();
-                student.setFirstName("John");
-                student.setLastName("Doe");
-                student.setEmail(studentEmail);
-                student.setDegreeType("Bachelor of Science");
-                student.setDegreeDurationYears(4);
-                student.setCourse("Computer Science");
-                student.setAcademicYear("2024-2028");
-                student.setCourses(List.of(
-                        new CourseEnrollment("Computer Science", 2024, 2028, true)
-                ));
+            List<StudentSeed> studentsToSeed = List.of(
+                    new StudentSeed(
+                            "John",
+                            "Doe",
+                            "john.doe@example.com",
+                            "Student@123",
+                            "Computer Science",
+                            "2024-2028",
+                            2024,
+                            2028
+                    ),
+                    new StudentSeed(
+                            "Priya",
+                            "Patel",
+                            "priya.patel@example.com",
+                            "Student2@123",
+                            "Business Administration",
+                            "2023-2027",
+                            2023,
+                            2027
+                    ),
+                    new StudentSeed(
+                            "Arjun",
+                            "Menon",
+                            "arjun.menon@example.com",
+                            "Student3@123",
+                            "Mechanical Engineering",
+                            "2022-2026",
+                            2022,
+                            2026
+                    )
+            );
 
-                studentRepository.save(student);
+            studentsToSeed.forEach(seed -> {
+                if (!studentRepository.existsByEmail(seed.email())) {
+                    Student student = new Student();
+                    student.setFirstName(seed.firstName());
+                    student.setLastName(seed.lastName());
+                    student.setEmail(seed.email());
+                    student.setDegreeType("Bachelor's Degree");
+                    student.setDegreeDurationYears(seed.endYear() - seed.startYear());
+                    student.setCourse(seed.course());
+                    student.setAcademicYear(seed.academicYear());
+                    student.setCourses(List.of(
+                            new CourseEnrollment(
+                                    seed.course(),
+                                    seed.startYear(),
+                                    seed.endYear(),
+                                    Year.now().getValue() <= seed.endYear())
+                    ));
 
-                System.out.println("Sample student created: " + studentEmail);
-            } else {
-                System.out.println("Sample student already exists: " + studentEmail);
-            }
+                    studentRepository.save(student);
+
+                    System.out.println("Sample student created: " + seed.email());
+                } else {
+                    System.out.println("Sample student already exists: " + seed.email());
+                }
+
+                if (!userRepository.existsByEmail(seed.email())) {
+                    User studentUser = new User();
+                    studentUser.setName(seed.firstName() + " " + seed.lastName());
+                    studentUser.setUsername(seed.email());
+                    studentUser.setEmail(seed.email());
+                    studentUser.setPassword(passwordEncoder.encode(seed.password()));
+                    studentUser.setRoles(Set.of("ROLE_STUDENT"));
+
+                    userRepository.save(studentUser);
+
+                    System.out.printf("Student user created: %s / %s%n", seed.email(), seed.password());
+                } else {
+                    System.out.println("Student user already exists: " + seed.email());
+                }
+            });
         };
     }
 }
