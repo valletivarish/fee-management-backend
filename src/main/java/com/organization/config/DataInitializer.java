@@ -51,19 +51,19 @@ public class DataInitializer {
 
             List<StudentSeed> studentsToSeed = List.of(
                     new StudentSeed(
-                            "John",
-                            "Doe",
-                            "john.doe@example.com",
-                            "Student@123",
-                            "Computer Science",
-                            "2024-2028",
-                            2024,
-                            2028
+                            "Aditi",
+                            "Sharma",
+                            "aditi.sharma@example.com",
+                            "Student1@123",
+                            "Computer Science Engineering",
+                            "2021-2025",
+                            2021,
+                            2025
                     ),
                     new StudentSeed(
-                            "Priya",
-                            "Patel",
-                            "priya.patel@example.com",
+                            "Rahul",
+                            "Desai",
+                            "rahul.desai@example.com",
                             "Student2@123",
                             "Business Administration",
                             "2023-2027",
@@ -71,9 +71,9 @@ public class DataInitializer {
                             2027
                     ),
                     new StudentSeed(
-                            "Arjun",
-                            "Menon",
-                            "arjun.menon@example.com",
+                            "Sofia",
+                            "Fernandes",
+                            "sofia.fernandes@example.com",
                             "Student3@123",
                             "Mechanical Engineering",
                             "2022-2026",
